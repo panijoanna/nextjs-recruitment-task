@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 
 type User = {
   id: number;
@@ -8,11 +9,27 @@ type User = {
 
 type UserListProps = {
   users: User[];
+  currentPage: number;
+  hasNextPage: boolean;
 };
 
-const UserList = ({ users }: UserListProps) => {
+const UserList = ({ users, currentPage, hasNextPage }: UserListProps) => {
+  const router = useRouter();
+
+  const handleNextPage = () => {
+    if (hasNextPage) {
+      router.push(`/users?page=${currentPage + 1}`);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      router.push(`/users?page=${currentPage - 1}`);
+    }
+  };
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 py-14">
+    <div className="flex justify-center flex-col items-center min-h-screen bg-gray-100 py-14">
       <div className="w-full max-w-4xl p-6 bg-white rounded-lg shadow-md">
         <h1 className="text-3xl font-semibold text-center text-gray-800 mb-6">
           Users List
@@ -45,6 +62,31 @@ const UserList = ({ users }: UserListProps) => {
             </li>
           ))}
         </ul>
+      </div>
+      <div className="flex justify-center items-center space-x-4 mt-6">
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className={`px-6 py-1 text-white font-semibold rounded-lg focus:outline-none focus:ring-2 transition-all ${
+            currentPage === 1
+              ? "bg-slate-300"
+              : "bg-gray-800 hover:bg-gray-700 focus:ring-blue-500"
+          }`}
+        >
+          Previous
+        </button>
+        <span className="text-lg text-gray-800 font-medium">{currentPage}</span>
+        <button
+          onClick={handleNextPage}
+          disabled={!hasNextPage}
+          className={`px-6 py-1 text-white font-semibold rounded-lg focus:outline-none focus:ring-2 transition-all ${
+            !hasNextPage
+              ? "bg-slate-300"
+              : "bg-gray-800 hover:bg-gray-700 focus:ring-blue-500"
+          }`}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
