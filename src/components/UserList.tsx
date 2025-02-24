@@ -1,10 +1,15 @@
 "use client";
+import { useState, useEffect } from "react";
 import UserPagination from "./UserPagination";
+import { getUserAddresses } from "@/app/api/db";
+import UserAddress, { Address } from "./UserAddress";
+import Button from "./Button";
 
 type User = {
   id: number;
   first_name: string;
   last_name: string;
+  email: string;
 };
 
 type UserListProps = {
@@ -14,6 +19,29 @@ type UserListProps = {
 };
 
 const UserList = ({ users, page, totalPages }: UserListProps) => {
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [userAddresses, setUserAddresses] = useState<Address[] | null>(null);
+
+  useEffect(() => {
+    if (selectedUserId !== null) {
+      const fetchAddresses = async () => {
+        const addresses = await getUserAddresses(selectedUserId);
+        setUserAddresses(addresses);
+      };
+
+      fetchAddresses();
+    }
+  }, [selectedUserId]);
+
+  const handleUserClick = (userId: number) => {
+    if (selectedUserId === userId) {
+      setSelectedUserId(null);
+      setUserAddresses(null);
+    } else {
+      setSelectedUserId(userId);
+    }
+  };
+
   return (
     <div className="flex justify-center flex-col items-center min-h-screen bg-gray-100 py-14">
       <div className="w-full max-w-4xl p-6 bg-white rounded-lg shadow-md">
@@ -22,32 +50,30 @@ const UserList = ({ users, page, totalPages }: UserListProps) => {
         </h1>
 
         <div className="flex justify-end mb-6">
-          <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-all">
-            Create a new user
-          </button>
+          <Button variant="createButton" text="Create a new user" />
         </div>
 
         <ul className="space-y-4">
           {users.map((user) => (
             <li
               key={user.id}
-              className="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow"
+              className="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow cursor-pointer"
+              onClick={() => handleUserClick(user.id)}
             >
               <div className="text-lg font-medium text-gray-700">
                 {user.first_name} {user.last_name}
               </div>
 
               <div className="space-x-2">
-                <button className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-600 transition-all">
-                  Edit
-                </button>
-                <button className="px-4 py-2 border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all">
-                  Delete
-                </button>
+                <Button variant="editButton" text="Edit" />
+                <Button variant="deleteButton" text="Delete" />
               </div>
             </li>
           ))}
         </ul>
+        {selectedUserId && userAddresses && (
+          <UserAddress addresses={userAddresses} />
+        )}
       </div>
       <UserPagination currentPage={page} totalPages={totalPages} />
     </div>
