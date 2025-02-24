@@ -21,3 +21,20 @@ export const query = async (text: string, params?: QueryParam[]) => {
     client.release();
   }
 };
+
+export const getUsers = async (page: number, perPage: number) => {
+  const offset = (page - 1) * perPage;
+  const queryText = `
+    SELECT id, first_name, last_name
+    FROM users
+    LIMIT $1 OFFSET $2
+  `;
+  const result = await query(queryText, [perPage, offset]);
+  return result.rows;
+};
+
+export const getUsersCount = async () => {
+  const queryText = "SELECT COUNT(*) FROM users";
+  const result = await query(queryText);
+  return parseInt(result.rows[0].count, 10);
+};

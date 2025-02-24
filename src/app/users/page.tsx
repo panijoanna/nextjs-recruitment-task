@@ -1,30 +1,24 @@
+import { getUsers, getUsersCount } from "@/app/api/db";
 import UserList from "@/components/UserList";
-import { query } from "../api/db";
-interface SearchParams {
-  page?: string;
-}
 
-const UserPage = async ({ searchParams }: { searchParams: SearchParams }) => {
-  const page = parseInt(searchParams.page || "1", 10);
-  const pageSize = 5;
-  const offset = (page - 1) * pageSize;
-  let users = [];
-  let hasNextPage = false;
+const UserPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
+  const getSearchParams = async () => {
+    return searchParams;
+  };
 
-  try {
-    const result = await query("SELECT * FROM users LIMIT $1 OFFSET $2", [
-      pageSize + 1,
-      offset,
-    ]);
-    users = result.rows.slice(0, pageSize);
-    hasNextPage = result.rows.length > pageSize;
-  } catch (error) {
-    console.error("Database query error:", error);
-  }
+  const params = await getSearchParams();
+  const page = parseInt(params.page as string) || 1;
+  const perPage = parseInt(params.per_page as string) || 5;
 
-  return (
-    <UserList users={users} currentPage={page} hasNextPage={hasNextPage} />
-  );
+  const users = await getUsers(page, perPage);
+  const totalUsers = await getUsersCount();
+  const totalPages = Math.ceil(totalUsers / perPage);
+
+  return <UserList users={users} page={page} totalPages={totalPages} />;
 };
 
 export default UserPage;
