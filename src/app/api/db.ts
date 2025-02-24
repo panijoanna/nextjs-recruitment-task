@@ -48,3 +48,25 @@ export const getUserAddresses = async (userId: number) => {
   const result = await query(queryText, [userId]);
   return result.rows;
 };
+
+export const getUserAddressesPaginated = async (
+  userId: number,
+  page: number,
+  perPage: number
+) => {
+  const offset = (page - 1) * perPage;
+  const queryText = `
+    SELECT address_type, valid_from, post_code, city, country_code, street, building_number
+    FROM users_addresses
+    WHERE user_id = $1
+    LIMIT $2 OFFSET $3
+  `;
+  const result = await query(queryText, [userId, perPage, offset]);
+  return result.rows;
+};
+
+export const getUserAddressesCount = async (userId: number) => {
+  const queryText = "SELECT COUNT(*) FROM users_addresses WHERE user_id = $1";
+  const result = await query(queryText, [userId]);
+  return parseInt(result.rows[0].count, 10);
+};

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
+import { getUserAddressesPaginated, getUserAddressesCount } from "@/app/api/db";
 import UserPagination from "./UserPagination";
-import { getUserAddresses } from "@/app/api/db";
 import UserAddress, { Address } from "./UserAddress";
 import Button from "./Button";
 
@@ -21,17 +21,28 @@ type UserListProps = {
 const UserList = ({ users, page, totalPages }: UserListProps) => {
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [userAddresses, setUserAddresses] = useState<Address[] | null>(null);
+  const [addressPage, setAddressPage] = useState<number>(1);
+  const [totalAddressPages, setTotalAddressPages] = useState<number>(1);
+
+  const perPage = 1;
 
   useEffect(() => {
     if (selectedUserId !== null) {
       const fetchAddresses = async () => {
-        const addresses = await getUserAddresses(selectedUserId);
+        const addresses = await getUserAddressesPaginated(
+          selectedUserId,
+          addressPage,
+          perPage
+        );
         setUserAddresses(addresses);
+
+        const totalAddresses = await getUserAddressesCount(selectedUserId);
+        setTotalAddressPages(Math.ceil(totalAddresses / perPage));
       };
 
       fetchAddresses();
     }
-  }, [selectedUserId]);
+  }, [selectedUserId, addressPage]);
 
   const handleUserClick = (userId: number) => {
     if (selectedUserId === userId) {
@@ -39,6 +50,7 @@ const UserList = ({ users, page, totalPages }: UserListProps) => {
       setUserAddresses(null);
     } else {
       setSelectedUserId(userId);
+      setAddressPage(1);
     }
   };
 
@@ -72,7 +84,14 @@ const UserList = ({ users, page, totalPages }: UserListProps) => {
           ))}
         </ul>
         {selectedUserId && userAddresses && (
-          <UserAddress addresses={userAddresses} />
+          <>
+            <UserAddress addresses={userAddresses} />
+            <UserPagination
+              currentPage={addressPage}
+              totalPages={totalAddressPages}
+              onPageChange={setAddressPage}
+            />
+          </>
         )}
       </div>
       <UserPagination currentPage={page} totalPages={totalPages} />
