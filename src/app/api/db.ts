@@ -38,3 +38,13 @@ export const getUsersCount = async () => {
   const result = await query(queryText);
   return parseInt(result.rows[0].count, 10);
 };
+
+export const getUserAddresses = async (userId: number) => {
+  const queryText = `
+    SELECT address_type, valid_from, post_code, city, country_code, street, building_number
+    FROM users_addresses
+    WHERE user_id = $1
+  `;
+  const result = await query(queryText, [userId]);
+  return result.rows;
+};
