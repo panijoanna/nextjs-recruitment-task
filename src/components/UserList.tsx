@@ -72,33 +72,32 @@ const UserList = ({ users, page, totalPages }: UserListProps) => {
 
         <ul className="space-y-4">
           {users.map((user) => (
-            <li
-              key={user.id}
-              className="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow"
-            >
-              <div
-                className="text-lg font-medium text-blue-600 cursor-pointer hover:text-blue-800 hover:underline"
-                onClick={() => handleUserClick(user.id)}
-              >
-                {user.first_name} {user.last_name}
+            <li key={user.id} className="bg-gray-50 p-4 rounded-lg shadow">
+              <div className="flex justify-between items-center">
+                <div
+                  className="text-lg font-medium text-blue-600 cursor-pointer hover:text-blue-800 hover:underline"
+                  onClick={() => handleUserClick(user.id)}
+                >
+                  {user.first_name} {user.last_name}
+                </div>
+                <div className="space-x-2">
+                  <Button variant="editButton" text="Edit" />
+                  <Button variant="deleteButton" text="Delete" />
+                </div>
               </div>
-              <div className="space-x-2">
-                <Button variant="editButton" text="Edit" />
-                <Button variant="deleteButton" text="Delete" />
-              </div>
+              {selectedUserId === user.id && userAddresses && (
+                <div className="mt-4">
+                  <UserAddress addresses={userAddresses} />
+                  <UserPagination
+                    currentPage={addressPage}
+                    totalPages={totalAddressPages}
+                    onPageChange={setAddressPage}
+                  />
+                </div>
+              )}
             </li>
           ))}
         </ul>
-        {selectedUserId && userAddresses && (
-          <>
-            <UserAddress addresses={userAddresses} />
-            <UserPagination
-              currentPage={addressPage}
-              totalPages={totalAddressPages}
-              onPageChange={setAddressPage}
-            />
-          </>
-        )}
       </div>
       <UserPagination currentPage={page} totalPages={totalPages} />
     </div>
