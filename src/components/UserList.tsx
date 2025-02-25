@@ -27,6 +27,11 @@ const UserList = ({ users, page, totalPages }: UserListProps) => {
   const perPage = 1;
 
   useEffect(() => {
+    setSelectedUserId(null);
+    setUserAddresses(null);
+  }, [page]);
+
+  useEffect(() => {
     if (selectedUserId !== null) {
       const fetchAddresses = async () => {
         const addresses = await getUserAddressesPaginated(
