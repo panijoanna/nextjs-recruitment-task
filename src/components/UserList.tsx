@@ -69,13 +69,14 @@ const UserList = ({ users, page, totalPages }: UserListProps) => {
           {users.map((user) => (
             <li
               key={user.id}
-              className="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow cursor-pointer"
-              onClick={() => handleUserClick(user.id)}
+              className="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow"
             >
-              <div className="text-lg font-medium text-gray-700">
+              <div
+                className="text-lg font-medium text-blue-600 cursor-pointer hover:text-blue-800 hover:underline"
+                onClick={() => handleUserClick(user.id)}
+              >
                 {user.first_name} {user.last_name}
               </div>
-
               <div className="space-x-2">
                 <Button variant="editButton" text="Edit" />
                 <Button variant="deleteButton" text="Delete" />
