@@ -59,6 +59,16 @@ const UserList = ({ users, page, totalPages }: UserListProps) => {
     }
   };
 
+  const handleEditAddress = (updatedAddress: Address) => {
+    const updatedAddresses = userAddresses?.map((address) =>
+      address.address_type === updatedAddress.address_type &&
+      address.valid_from === updatedAddress.valid_from
+        ? updatedAddress
+        : address
+    );
+    setUserAddresses(updatedAddresses || []);
+  };
+
   return (
     <div className="flex justify-center flex-col items-center min-h-screen bg-gray-100 py-14">
       <div className="w-full max-w-4xl p-6 bg-white rounded-lg shadow-md">
@@ -87,7 +97,10 @@ const UserList = ({ users, page, totalPages }: UserListProps) => {
               </div>
               {selectedUserId === user.id && userAddresses && (
                 <div className="mt-4">
-                  <UserAddress addresses={userAddresses} />
+                  <UserAddress
+                    addresses={userAddresses}
+                    onEditAddress={handleEditAddress}
+                  />
                   <UserPagination
                     currentPage={addressPage}
                     totalPages={totalAddressPages}
