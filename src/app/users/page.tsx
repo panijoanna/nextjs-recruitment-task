@@ -1,4 +1,4 @@
-import { getUsers, getUsersCount } from "@/app/api/db";
+import { getUsers, getUsersCount } from "@/app/_server/actions";
 import UserList from "@/components/user/UserList";
 
 const UserPage = async ({
