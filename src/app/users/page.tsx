@@ -1,5 +1,5 @@
 import { getUsers, getUsersCount } from "@/app/api/db";
-import UserList from "@/components/UserList";
+import UserList from "@/components/user/UserList";
 
 const UserPage = async ({
   searchParams,

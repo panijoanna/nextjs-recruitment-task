@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import { getUserAddressesPaginated, getUserAddressesCount } from "@/app/api/db";
 import UserPagination from "./UserPagination";
-import UserAddress, { Address } from "./UserAddress";
-import Button from "./common/Button";
+import UserAddress, { Address } from "../address/UserAddress";
+import Button from "../common/Button";
 
 type User = {
   id: number;
