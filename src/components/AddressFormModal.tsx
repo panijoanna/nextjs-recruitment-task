@@ -1,33 +1,54 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Address } from "./UserAddress";
 
 type AddressFormModalProps = {
   onClose: () => void;
+  onSubmit: (address: Address) => void;
+  initialAddress?: Address;
 };
 
-const AddressFormModal = ({ onClose }: AddressFormModalProps) => {
-  const [address, setAddress] = useState({
+const AddressFormModal = ({
+  onClose,
+  onSubmit,
+  initialAddress,
+}: AddressFormModalProps) => {
+  const [address, setAddress] = useState<Address>({
     street: "",
     building_number: "",
     post_code: "",
     city: "",
     country_code: "",
+    address_type: "HOME",
+    valid_from: new Date().toISOString(),
   });
+
+  useEffect(() => {
+    if (initialAddress) {
+      setAddress(initialAddress);
+    }
+  }, [initialAddress]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddress({ ...address, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(address);
+    onClose();
   };
 
   return (
     <div className="mt-5">
       <div className="flex flex-col bg-gray-50 rounded-lg shadow-md p-8">
         <div className="flex justify-between items-center w-full">
-          <h2 className="text-2xl mb-4">Address form</h2>
+          <h2 className="text-2xl mb-4">Edit Address</h2>
           <span className="close cursor-pointer text-xl" onClick={onClose}>
             &times;
           </span>
         </div>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"
             name="street"
