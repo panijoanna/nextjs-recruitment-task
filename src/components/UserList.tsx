@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { getUserAddressesPaginated, getUserAddressesCount } from "@/app/api/db";
 import UserPagination from "./UserPagination";
 import UserAddress, { Address } from "./UserAddress";
-import Button from "./Button";
+import Button from "./common/Button";
 
 type User = {
   id: number;
