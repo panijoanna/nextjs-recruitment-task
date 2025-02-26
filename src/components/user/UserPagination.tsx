@@ -1,10 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange?: (page: number) => void;
-}
+import { PaginationProps } from "./types";
 
 const UserPagination = ({
   currentPage,

@@ -1,22 +1,8 @@
 "use client";
-import Button from "./Button";
+import Button from "../common/Button";
 import AddressFormModal from "./AddressFormModal";
 import { useState } from "react";
-
-export type Address = {
-  address_type: string;
-  valid_from: string;
-  post_code: string;
-  city: string;
-  country_code: string;
-  street: string;
-  building_number: string;
-};
-
-export type UserAddressProps = {
-  addresses: Address[];
-  onEditAddress: (updatedAddress: Address) => void;
-};
+import { Address, UserAddressProps } from "./types";
 
 const UserAddress = ({ addresses, onEditAddress }: UserAddressProps) => {
   const [showCreateModal, setShowCreateModal] = useState(false);

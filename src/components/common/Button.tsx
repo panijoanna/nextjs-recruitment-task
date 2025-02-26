@@ -1,8 +1,4 @@
-interface ButtonProps {
-  text: string;
-  variant: "editButton" | "deleteButton" | "createButton";
-  onClick?: () => void;
-}
+import { ButtonProps } from "./types";
 
 const Button = ({ text, variant, onClick }: ButtonProps) => {
   const buttonStyles = {
