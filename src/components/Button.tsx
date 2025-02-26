@@ -1,9 +1,10 @@
 interface ButtonProps {
   text: string;
   variant: "editButton" | "deleteButton" | "createButton";
+  onClick?: () => void;
 }
 
-const Button = ({ text, variant }: ButtonProps) => {
+const Button = ({ text, variant, onClick }: ButtonProps) => {
   const buttonStyles = {
     editButton:
       "px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-600 transition-all",
@@ -13,7 +14,11 @@ const Button = ({ text, variant }: ButtonProps) => {
       "px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-all",
   };
 
-  return <button className={`${buttonStyles[variant]}`}>{text}</button>;
+  return (
+    <button className={`${buttonStyles[variant]}`} onClick={onClick}>
+      {text}
+    </button>
+  );
 };
 
 export default Button;
