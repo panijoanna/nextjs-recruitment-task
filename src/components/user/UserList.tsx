@@ -1,6 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { getUserAddressesPaginated, getUserAddressesCount } from "@/app/api/db";
+import {
+  getUserAddressesPaginated,
+  getUserAddressesCount,
+} from "@/app/_server/actions";
 import UserPagination from "./UserPagination";
 import UserAddress from "../address/UserAddress";
 import Button from "../common/Button";
