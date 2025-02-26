@@ -2,21 +2,10 @@
 import { useState, useEffect } from "react";
 import { getUserAddressesPaginated, getUserAddressesCount } from "@/app/api/db";
 import UserPagination from "./UserPagination";
-import UserAddress, { Address } from "../address/UserAddress";
+import UserAddress from "../address/UserAddress";
 import Button from "../common/Button";
-
-type User = {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-};
-
-type UserListProps = {
-  users: User[];
-  page: number;
-  totalPages: number;
-};
+import { UserListProps } from "./types";
+import { Address } from "../address/types";
 
 const UserList = ({ users, page, totalPages }: UserListProps) => {
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);

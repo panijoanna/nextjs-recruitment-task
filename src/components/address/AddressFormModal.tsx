@@ -1,12 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Address } from "./UserAddress";
-
-type AddressFormModalProps = {
-  onClose: () => void;
-  onSubmit: (address: Address) => void;
-  initialAddress?: Address;
-};
+import { Address, AddressFormModalProps } from "./types";
 
 const AddressFormModal = ({
   onClose,
